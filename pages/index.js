@@ -1,20 +1,10 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import {PrismaClient} from '@prisma/client';
 import Link from 'next/link'
+import { signIn, signOut, useSession } from 'next-auth/client'
 
-const prisma = new PrismaClient();
-
-export const getStaticProps = async() => {
-  const posts = await prisma.post.findMany();
-  return {
-    props: {
-      posts
-    }
-  };
-}
-
-export default function Home({posts}) {
+export default function Home() {
+  const [ session, loading ] = useSession()
   return (
     <div className="">
       <Head>
@@ -25,21 +15,19 @@ export default function Home({posts}) {
       <Link href={`/test`}>
         <a>Go to Test</a>
       </Link>
-      <ul className="">
-      {posts.map(({ id, title, excerpt }) => (
-        <li className="" key={id}>
-          <Link href={`/post/${id}`}>
-            <a>Go to Post</a>
-          </Link>
-          <br />
-          {title}
-          <br />
-          {id}
-          <br />
-          {excerpt}
-        </li>
-      ))}
-    </ul>
+      <br/>
+      <br/>
+      {!session && <>
+        Not signed in <br/>
+        <button onClick={() => signIn()}  className="cursor-pointer underline">Sign in</button>
+      </>}
+      {session && <>
+        Signed in as {session.user.email} <br/>
+        <Link href={`/blog`}>
+          <a className="cursor-pointer underline">Go to Blog</a>
+        </Link>
+        <button onClick={() => signOut()}  className="cursor-pointer underline">Sign out</button>
+      </>}
   </div>
   )
 }
