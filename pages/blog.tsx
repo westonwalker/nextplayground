@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { PrismaClient, Post } from '@prisma/client';
+import { PrismaClient, Post, User } from '@prisma/client';
 import Link from 'next/link'
 
 const prisma = new PrismaClient();
@@ -23,7 +23,7 @@ export default function BlogPage({ posts }: { posts: Post[] }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Link href="/">
-        <a className="cursor-pointer underline" > Go to home </a>
+        <a className="cursor-pointer underline"> Go to home </a>
       </Link>
       < br />
       <ul className="">
